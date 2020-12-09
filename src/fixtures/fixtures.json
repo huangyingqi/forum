@@ -1,0 +1,31 @@
+{
+  "forums":[
+    {
+      "forum_id": "100100001",
+      "creator": "1001",
+      "name": "forum1",
+      "users": ["1001"],
+      "admins": ["1001"],
+      "isPrivilage": false
+    },
+    {
+      "forum_id": "100100002",
+      "creator": "1001",
+      "name": "forum1",
+      "users": ["1001"],
+      "admins": ["1001"],
+      "isPrivilage": false
+    }
+  ],
+  "users": [{
+      "id": "1001",
+      "name": "user1",
+      "img": "img1"
+    },{
+      "id": "1002",
+      "name": "user2",
+      "img": "img2"
+    }
+  ],
+  "maxUserId": 3
+}

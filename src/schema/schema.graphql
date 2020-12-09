@@ -1,0 +1,35 @@
+type Forum {
+  forum_id: ID!
+  creater: ID!
+  name: String
+  admins: [ID!]
+  users: [User]
+  isPrivilage: Boolean
+}
+
+type User {
+  id: ID!
+  name: String
+  img: String
+}
+
+type Message {
+  id: ID!
+  text: String
+  sender: User
+  time: String
+}
+
+type Query {
+  myForums(id: ID): [Forum]
+  forums: [Forum]
+  userInfo(id: ID): User
+  enterForum(id: ID, forum_id: ID): [Message]
+  users(forum_id: ID): [User]
+}
+
+type Mutation {
+  createForum(id: ID, name: String, private: Boolean): Forum
+  joinForum(id: ID): Forum
+  postMessage(id: ID, text: String): Message
+}
