@@ -1,31 +1,56 @@
 {
-  "forums":[
+  "forums": [
     {
       "forum_id": "100100001",
       "creator": "1001",
       "name": "forum1",
-      "users": ["1001"],
+      "users": ["1001", "1002", "1005", "1006"],
       "admins": ["1001"],
       "isPrivilage": false
     },
     {
       "forum_id": "100100002",
       "creator": "1001",
-      "name": "forum1",
-      "users": ["1001"],
+      "name": "forum2",
+      "users": ["1001", "1003", "1005", "1008"],
       "admins": ["1001"],
       "isPrivilage": false
+    },
+    {
+      "forum_id": "100100003",
+      "creator": "1003",
+      "name": "forum2",
+      "users": ["1003", "1005", "1008"],
+      "admins": ["1003"],
+      "isPrivilage": false
+    },
+    {
+      "forum_id": "100100004",
+      "creator": "1005",
+      "name": "createdHaha",
+      "isPrivilage": true,
+      "admins": ["1005"],
+      "users": ["1005"]
+    },
+    {
+      "forum_id": "100100005",
+      "creator": "1002",
+      "name": "createdPub",
+      "isPrivilage": false,
+      "admins": ["1002"],
+      "users": ["1002"]
     }
   ],
-  "users": [{
-      "id": "1001",
-      "name": "user1",
-      "img": "img1"
-    },{
-      "id": "1002",
-      "name": "user2",
-      "img": "img2"
-    }
+  "users": [
+    { "id": "1001", "name": "user1", "img": "img1" },
+    { "id": "1002", "name": "user2", "img": "img2" },
+    { "id": "1003", "name": "user3", "img": "img3" },
+    { "id": "1004", "name": "user4", "img": "img4" },
+    { "id": "1005", "name": "user5", "img": "img5" },
+    { "id": "1006", "name": "user6", "img": "img6" },
+    { "id": "1007", "name": "user7", "img": "img7" },
+    { "id": "1008", "name": "user8", "img": "img8" }
   ],
-  "maxUserId": 3
+  "maxForumId": 100100005,
+  "maxUserId": 1008
 }

@@ -1,10 +1,15 @@
 type Forum {
   forum_id: ID!
-  creater: ID!
+  creator: ID!
   name: String
   admins: [ID!]
-  users: [User]
+  users: [ID!]
   isPrivilage: Boolean
+}
+
+type SimpleForum {
+  forum_id: ID!
+  name: String
 }
 
 type User {
@@ -21,15 +26,20 @@ type Message {
 }
 
 type Query {
-  myForums(id: ID): [Forum]
-  forums: [Forum]
-  userInfo(id: ID): User
-  enterForum(id: ID, forum_id: ID): [Message]
-  users(forum_id: ID): [User]
+  myForums(uid: ID!): [Forum]
+  forums(uid: ID!): [SimpleForum]
+  members(uid: ID!, fid: ID!): [User]
+  messages(uid: ID, fid: ID, offset: Int, showCount: Int): [Message]
+  userInfo(uid: ID!): User
+}
+
+input ForumInput {
+  name: String
+  isPrivilage: Boolean
 }
 
 type Mutation {
-  createForum(id: ID, name: String, private: Boolean): Forum
-  joinForum(id: ID): Forum
-  postMessage(id: ID, text: String): Message
+  createForum(uid: ID!, forum: ForumInput): Forum
+  joinForum(uid: ID!, fid: Int): Forum
+  postMessage(uid: ID, fid: Int, text: String): Message
 }
