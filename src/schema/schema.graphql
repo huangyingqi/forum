@@ -25,6 +25,11 @@ type Message {
   time: String
 }
 
+type ForumMessage {
+  forum: Forum
+  messages: [Message]
+}
+
 type Query {
   myForums(uid: ID!): [Forum]
   forums(uid: ID!): [SimpleForum]
@@ -40,6 +45,6 @@ input ForumInput {
 
 type Mutation {
   createForum(uid: ID!, forum: ForumInput): Forum
-  joinForum(uid: ID!, fid: Int): Forum
-  postMessage(uid: ID, fid: Int, text: String): Message
+  joinForum(uid: ID!, fid: ID!): ForumMessage
+  postMessage(uid: ID!, fid: ID!, text: String): Message
 }

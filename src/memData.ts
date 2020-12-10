@@ -77,7 +77,7 @@ export class MemData{
   addNewForum(forum: Forum) {
     this._fixture.forums.push(forum);
     // console.log("new Forum:", forum);
-    this.saveToFile();
+    this.saveToForum();
   }
 
   findForum(fid: string): Forum{
@@ -89,29 +89,36 @@ export class MemData{
     return obForum;
   }
 
-  joinToForum(uid: number, fid: number) {
-    let obForum = this._fixture.forums.find((forum) => {
-      if (forum.forum_id == fid)
-        return forum;
-    });
-
+  joinToForum(uid: string, obForum: Forum) {
     if (obForum) {
-      obForum.users.push(uid);
+      if (obForum.users.includes(uid)) {
+        // been inside
+        let messages = this.messages(obForum.forum_id);
+        return {
+          forum: obForum,
+          messages
+        };        
+        
+      } else {
+        obForum.users.push(uid);
+        this.saveToForum();
+        let messages = this.messages(obForum.forum_id);
+        return {
+          forum: obForum,
+          messages
+        };
+      }
+      
     }
   }
 
-  private saveToFile() {
+  private saveToForum() {
     writeFileSync(path.join(__dirname,'./fixtures/fixtures.json'), JSON.stringify(this._fixture), 'utf-8');
   }
 
   isInsideForum(uid: string, fid: string): boolean {
     let users = this.findForum(fid).users;
     return users.includes(uid);
-    // for (let i = 0; i < users.length; i++){
-    //   if (uid == users[i])
-    //     return true;
-    // }
-    return false;
   }
 
   getUsers(users: string[]): User[]{
@@ -122,7 +129,7 @@ export class MemData{
   }
 
   // Once inside a forum, he can:see the list of previous messages
-  messages(fid: number, offset: number = 0, showCount:number = 100): Messages[]{
+  messages(fid: string, offset: number = 0, showCount:number = 100): Messages[]{
     return this._message[fid].sort((a, b) => {
       return b.time - a.time;
     }).slice(offset, offset + showCount);

@@ -83,7 +83,7 @@ const resolverMap: IResolvers = {
       let forum = MemData.getInstance().findForum(fid);
       console.log("find: ", forum);
       if (forum) {
-        MemData.getInstance().joinToForum(uid, fid);
+        return MemData.getInstance().joinToForum(uid, forum);
       }
 
     },
