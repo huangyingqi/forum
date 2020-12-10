@@ -91,8 +91,10 @@ const resolverMap: IResolvers = {
     // post a message in the forum
     postMessage(_: void, { uid, fid, text }): any {
       // uid: ID, fid: Int, text: String)
+      console.log("postMessage:u:", uid, "f:", fid, "m:", text);
       if (MemData.getInstance().isInsideForum(uid, fid)) {
-        MemData.getInstance().postMessage(uid, fid, text);
+        console.log("user inside");
+        return MemData.getInstance().postMessage(uid, fid, text);
       }
     }
   }

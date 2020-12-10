@@ -138,10 +138,22 @@ export class MemData{
   }
 
   // post message
-  postMessage(uid: number, fid: number, text: string) {
-    // this._message[fid].push({
-
-    // })
+  postMessage(uid: string, fid: string, text: string) {
+    const { name, img } = this.userInfo(uid);
+    console.log("userInfo:", name, " i:", img, " m:", text);
+    const newMessage = {
+      text,
+      time: new Date().getTime(),
+      sender: {
+        id: uid,
+        name,
+        img
+      }
+    };
+    this._message[fid] = [newMessage, ...this._message[fid]];
+    console.log(this._message);
+    this.saveToMessage();
+    return newMessage;
   }
 
   userInfo(uid: string): User{
@@ -149,5 +161,9 @@ export class MemData{
       if (user.id == uid)
         return user;
     });
+  }
+
+  private saveToMessage() {
+    writeFileSync(path.join(__dirname,'./fixtures/message.json'), JSON.stringify(this._message), 'utf-8');
   }
 }
