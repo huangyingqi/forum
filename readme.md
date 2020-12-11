@@ -6,6 +6,9 @@
 
         npm run build:dev
 
+# test condition
+   http://localhost:3000/graphql
+
 # schema
 
 ## Types

@@ -74,6 +74,13 @@ const resolverMap: IResolvers = {
   Mutation: {
     // A user can create a new forum (and join it automatically)
     createForum(_: void, { uid, forum }): any{
+      let userInfo = MemData.getInstance().ForumMem.userInfo(uid);
+      console.log(userInfo);
+      if (!userInfo) {
+        return {
+          ack: { code: -3, tips: 'illegal user' }
+        };
+      }
       let forumNew = {
         forum_id: MemData.getInstance().ForumMem.maxForumId(),
         creator: uid,
@@ -93,6 +100,14 @@ const resolverMap: IResolvers = {
 
     // He can also join a forum if he knows the forum id
     joinForum(_: void, { uid, fid }): any{
+      let userInfo = MemData.getInstance().ForumMem.userInfo(uid);
+      console.log(userInfo);
+      if (!userInfo) {
+        return {
+          ack: { code: -3, tips: 'illegal user' }
+        };
+      }
+
       let forum = MemData.getInstance().ForumMem.findForum(fid);
       if (forum) {
         if (forum.isPrivilage) {
@@ -120,9 +135,16 @@ const resolverMap: IResolvers = {
 
     // post a message in the forum
     postMessage(_: void, { uid, fid, text }): any {
+      let res = MemData.getInstance().postMessage(uid, fid, text);
+      if (!res) {
+        return {
+          ack: { code: -1, tips: 'join the forum first!' },
+          data: res  
+        }
+      }
       return {
         ack: { code: 0, tips: '' },
-        data: MemData.getInstance().postMessage(uid, fid, text)
+        data: res 
       };
     },
 

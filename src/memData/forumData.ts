@@ -91,7 +91,9 @@ export class ForumMem{
   }
 
   isInsideForum(uid: string, fid: string): boolean {
-    let users = this.findForum(fid).users;
+    let users = this.findForum(fid)?.users;
+    if (!users)
+      return false;
     return users.includes(uid);
   }
 
