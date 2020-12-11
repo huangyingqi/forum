@@ -92,5 +92,6 @@
     { "id": "1008", "name": "user8", "img": "img8" }
   ],
   "maxForumId": 100100010,
-  "maxUserId": 1008
+  "maxUserId": 1008,
+  "maxNtfId": 10002
 }

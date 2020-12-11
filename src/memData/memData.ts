@@ -80,7 +80,7 @@ export class MemData{
           fid: objForum.forum_id,
           info: "May I join to your forum?",
           requester: UserInfo
-        });
+        }, this._forum.maxNtfId());
     })
   }
 

@@ -6,6 +6,7 @@ import { Forum, User } from "../interface/dataDefines";
 interface ForumData{
   maxForumId: number;
   maxUserId: number;
+  maxNtfId: number;
   forums: any[];
   users: any[];
 }
@@ -17,11 +18,12 @@ export class ForumMem{
       forums: [...fix.forums],
       users: [...fix.users],
       maxForumId: fix.maxForumId,
-      maxUserId: fix.maxUserId
+      maxUserId: fix.maxUserId,
+      maxNtfId: fix.maxNtfId
     };
   }
 
-  reqMaxForumId(): string{
+  maxForumId(): string{
     console.log(this._fixture.maxForumId);
     this._fixture.maxForumId +=1;
     return this._fixture.maxForumId.toString();
@@ -91,5 +93,11 @@ export class ForumMem{
   isInsideForum(uid: string, fid: string): boolean {
     let users = this.findForum(fid).users;
     return users.includes(uid);
+  }
+
+  maxNtfId() : string{
+    console.log(this._fixture.maxNtfId);
+    this._fixture.maxNtfId +=1;
+    return this._fixture.maxNtfId.toString();
   }
 }

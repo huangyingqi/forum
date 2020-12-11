@@ -1,20 +1,15 @@
 import { writeFileSync } from 'fs';
 import path from "path";
 import * as ntf from "../fixtures/notifies.json";
-import { ReqInfo } from "../interface/dataDefines";
+import { ReqInfo, enumState } from "../interface/dataDefines";
 
 enum enumNotify{
   NOTIFY,
   MANAGE
 }
 
-enum enumState{
-  UNREAD,
-  DISCARD,
-  AGREE
-}
-
 interface Notify{
+  id: String,
   time: number,
   message: String,
   kind: enumNotify,
@@ -42,8 +37,9 @@ export class NotifyMem{
     writeFileSync(path.join(__dirname,'../fixtures/notifies.json'), JSON.stringify(this._notify), 'utf-8');
   }
 
-  RequestJoin(admin: string, asker: ReqInfo) {
+  RequestJoin(admin: string, asker: ReqInfo, ntfId: string) {
     this.sendNotify(admin, {
+      id: ntfId,
       time: new Date().getTime(),
       message: "Someone request to join your forum",
       kind: enumNotify.MANAGE,
@@ -68,6 +64,32 @@ export class NotifyMem{
     console.log("allMyNotifies: ", uid);
     console.log(this._notify[uid]);
     return this._notify[uid];
+  }
+
+  setStateNtf(uid: string, nid: string, state: enumState): void {
+    let ntf = this._notify[uid].find(item => {
+      item.id == nid
+    });
+
+    if (ntf) {
+      if (!state)
+        ntf.state = enumState.READ;
+      else
+        ntf.state = state + 1;
+    }
+
+    this.saveToNtf();
+  }
+
+  getReqInfo(uid: string, nid: string): ReqInfo{
+    let ntf = this._notify[uid].find(item => {
+      item.id == nid
+    });
+    if (ntf) {
+      return ntf.reqInfo;
+    } else {
+      return null;
+    }
   }
 
 }

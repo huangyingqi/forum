@@ -24,3 +24,10 @@ export interface Message{
   sender: User,
   time: number
 }
+
+export enum enumState{
+  UNREAD,
+  READ,
+  DISCARD,
+  AGREE
+}

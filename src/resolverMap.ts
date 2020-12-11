@@ -1,5 +1,6 @@
 import { IResolvers } from 'graphql-tools';
 import { MemData } from "./memData/memData";
+import { enumState } from "./interface/dataDefines";
 
 const resolverMap: IResolvers = {
   Query: {
@@ -56,7 +57,7 @@ const resolverMap: IResolvers = {
     // A user can create a new forum (and join it automatically)
     createForum(_: void, { uid, forum }): any{
       let forumNew = {
-        forum_id: MemData.getInstance().ForumMem.reqMaxForumId(),
+        forum_id: MemData.getInstance().ForumMem.maxForumId(),
         creator: uid,
         name: forum.name,
         isPrivilage: forum.isPrivilage,
@@ -94,9 +95,22 @@ const resolverMap: IResolvers = {
     },
 
     // process the request from user ask for join to forum
-    processReq(_: void, { uid, fid, rid, yesOrNo }): any {
-      console.log("processReq ", uid, fid, rid, yesOrNo);
-      return MemData.getInstance().NotifyMem
+    processReq(_: void, { uid, nid, state }): any {
+      console.log("processReq ", uid, nid, state);
+      MemData.getInstance().NotifyMem.setStateNtf(uid, nid, state);
+      if (state && state == enumState.AGREE) {
+        const reqInfo = MemData.getInstance().NotifyMem.getReqInfo(uid, nid);
+        if (reqInfo) {
+          let forum = MemData.getInstance().ForumMem.findForum(reqInfo.fid);
+          if (forum) {
+            if (!forum.users.includes(uid)) {
+              forum.users.push(uid);
+              MemData.getInstance().ForumMem.flush();                
+            }
+          }
+        }
+      }
+      
     }
   }
 };
