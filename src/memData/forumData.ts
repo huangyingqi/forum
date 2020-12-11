@@ -96,8 +96,8 @@ export class ForumMem{
   }
 
   maxNtfId() : string{
-    console.log(this._fixture.maxNtfId);
-    this._fixture.maxNtfId +=1;
+    this._fixture.maxNtfId += 1;
+    this.saveToForum();
     return this._fixture.maxNtfId.toString();
   }
 }

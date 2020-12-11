@@ -45,13 +45,63 @@ type Notify {
   reqJoin: ReqJoinForum
 }
 
+type Ack {
+  code: Int
+  tips: String
+}
+
+type AckForums {
+  ack: Ack
+  data: [Forum]
+}
+
+type AckSimpleForums {
+  ack: Ack
+  data: [SimpleForum]
+}
+
+type AckUsers {
+  ack: Ack
+  data: [User]
+}
+
+type AckMessages {
+  ack: Ack
+  data: [Message]
+}
+
+type AckUser {
+  ack: Ack
+  data: User
+}
+
+type AckNotifies {
+  ack: Ack
+  data: [Notify]
+}
+
+type AckForum {
+  ack: Ack
+  data: Forum
+}
+
+type AckForumMessage {
+  ack: Ack
+  data: ForumMessage
+}
+
+type AckMessage {
+  ack: Ack
+  data: Message
+}
+
 type Query {
-  myForums(uid: ID!): [Forum]
-  forums(uid: ID!): [SimpleForum]
-  members(uid: ID!, fid: ID!): [User]
-  messages(uid: ID, fid: ID, offset: Int, showCount: Int): [Message]
-  userInfo(uid: ID!): User
-  myNotifies(uid: ID!): [Notify]
+  myForums(uid: ID!): AckForums
+  forums(uid: ID!): AckSimpleForums
+  members(uid: ID!, fid: ID!): AckUsers
+  messages(uid: ID, fid: ID, offset: Int, showCount: Int): AckMessages
+  userInfo(uid: ID!): AckUser
+  myNotifies(uid: ID!): AckNotifies
 }
 
 input ForumInput {
@@ -60,8 +110,8 @@ input ForumInput {
 }
 
 type Mutation {
-  createForum(uid: ID!, forum: ForumInput): Forum
-  joinForum(uid: ID!, fid: ID!): ForumMessage
-  postMessage(uid: ID!, fid: ID!, text: String): Message
-  processReq(uid: ID!, nid: ID!, yes: Boolean): String
+  createForum(uid: ID!, forum: ForumInput): AckForum
+  joinForum(uid: ID!, fid: ID!): AckForumMessage
+  postMessage(uid: ID!, fid: ID!, text: String): AckMessage
+  processReq(uid: ID!, nid: ID!, yes: Boolean): Ack
 }

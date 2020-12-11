@@ -38,6 +38,7 @@ export class NotifyMem{
   }
 
   RequestJoin(admin: string, asker: ReqInfo, ntfId: string) {
+    console.log("request jion ntfid:", ntfId);
     this.sendNotify(admin, {
       id: ntfId,
       time: new Date().getTime(),
