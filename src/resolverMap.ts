@@ -1,40 +1,27 @@
 import { IResolvers } from 'graphql-tools';
-import { MemData } from "./memData";
+import { MemData } from "./memData/memData";
 
 const resolverMap: IResolvers = {
   Query: {
     // all forums I jioned
     // A user can see the list of forums he has joined.
     myForums(_: void, { uid }): any[] {
-      let forums = [];
-      MemData.getInstance().fix.forums.forEach(forum => {
-        for (let i = 0; i < forum.users.length; i++){
-          if (forum.users[i] == uid) {
-            forums.push(forum);
-            break;
-          }
-        }
-      })
-      return forums;
+      return MemData.getInstance().ForumMem.myForums(uid);
     },
 
     // all forums I can see
     // A user can see the list of available forum and can join any
     forums(_: void, { uid }): any[]{
-      let forums = MemData.getInstance().fix.forums.filter((forum) => {
-        if ((!forum.isPrivilage) || (forum.creator == uid))
-          return forum;
-      });
-      
-      return forums;
+      console.log("forums:", uid);
+      return MemData.getInstance().ForumMem.forums(uid);
     },
 
     // Members of one Special Forum 
     // see the name and picture of the members of the forum
     members(_: void, { uid, fid }): any[]{
-      if (MemData.getInstance().isInsideForum(uid, fid)) {
-        let forums = MemData.getInstance().findForum(fid);
-        return MemData.getInstance().getUsers(forums.users);        
+      if (MemData.getInstance().ForumMem.isInsideForum(uid, fid)) {
+        let forums = MemData.getInstance().ForumMem.findForum(fid);
+        return MemData.getInstance().ForumMem.getUsers(forums.users);        
       } else {
         console.log("not inside forum", uid, fid);
         return [];
@@ -45,18 +32,22 @@ const resolverMap: IResolvers = {
     // show messages 
     // see the list of previous messages, ordered by most recent
     messages(_: void, { uid, fid, offset=0, showCount=100 }): any[]{
-      if (MemData.getInstance().isInsideForum(uid, fid)) {
+      if (MemData.getInstance().ForumMem.isInsideForum(uid, fid)) {
         console.log("inside forum");
-        return MemData.getInstance().messages(fid, offset, showCount);
+        return MemData.getInstance().MessageMem.messages(fid, offset, showCount);
       }
       return [];
     },
 
     // userInfo
     userInfo(_: void, { uid }): any {
-      const userInfo = MemData.getInstance().userInfo(uid);
+      const userInfo = MemData.getInstance().ForumMem.userInfo(uid);
       console.log("userInfo:", userInfo);
       return userInfo;
+    },
+
+    myNotifies(_: void, { uid }): any[]{
+      return MemData.getInstance().NotifyMem.allMyNotifies(uid);
     }
 
   },
@@ -65,7 +56,7 @@ const resolverMap: IResolvers = {
     // A user can create a new forum (and join it automatically)
     createForum(_: void, { uid, forum }): any{
       let forumNew = {
-        forum_id: MemData.getInstance().reqMaxForumId(),
+        forum_id: MemData.getInstance().ForumMem.reqMaxForumId(),
         creator: uid,
         name: forum.name,
         isPrivilage: forum.isPrivilage,
@@ -73,29 +64,39 @@ const resolverMap: IResolvers = {
         users: [uid]
       }
 
-      MemData.getInstance().addNewForum(forumNew);
+      MemData.getInstance().ForumMem.addForum(forumNew);
 
       return forumNew;
     },
 
     // He can also join a forum if he knows the forum id
     joinForum(_: void, { uid, fid }): any{
-      let forum = MemData.getInstance().findForum(fid);
+      let forum = MemData.getInstance().ForumMem.findForum(fid);
       console.log("find: ", forum);
       if (forum) {
-        return MemData.getInstance().joinToForum(uid, forum);
+        if (forum.isPrivilage) {
+          // send request to all admins
+          console.log("privilage forum send request to admins")
+          MemData.getInstance().sendRequest(uid, forum);
+        } else {
+          return MemData.getInstance().joinToForum(uid, forum);  
+        }
+        
+      } else {
+        return { forum: null, messages: [] };
       }
 
     },
 
     // post a message in the forum
     postMessage(_: void, { uid, fid, text }): any {
-      // uid: ID, fid: Int, text: String)
-      console.log("postMessage:u:", uid, "f:", fid, "m:", text);
-      if (MemData.getInstance().isInsideForum(uid, fid)) {
-        console.log("user inside");
-        return MemData.getInstance().postMessage(uid, fid, text);
-      }
+      return MemData.getInstance().postMessage(uid, fid, text);
+    },
+
+    // process the request from user ask for join to forum
+    processReq(_: void, { uid, fid, rid, yesOrNo }): any {
+      console.log("processReq ", uid, fid, rid, yesOrNo);
+      return MemData.getInstance().NotifyMem
     }
   }
 };

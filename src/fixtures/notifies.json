@@ -1,0 +1,26 @@
+{
+  "1003": [
+    {
+      "time": 1607635366946,
+      "message": "Someone request to join your forum",
+      "kind": 1,
+      "state": 0,
+      "reqInfo": {
+        "fid": "100100007",
+        "info": "May I join to your forum?",
+        "requester": { "id": "1005", "name": "user5", "img": "img5" }
+      }
+    },
+    {
+      "time": 1607635213587,
+      "message": "Someone request to join your forum",
+      "kind": 1,
+      "state": 0,
+      "reqInfo": {
+        "fid": "100100007",
+        "info": "May I join to your forum?",
+        "requester": { "id": "1007", "name": "user7", "img": "img7" }
+      }
+    }
+  ]
+}

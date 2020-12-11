@@ -39,6 +39,46 @@
       "isPrivilage": false,
       "admins": ["1002"],
       "users": ["1002"]
+    },
+    {
+      "forum_id": "100100006",
+      "creator": "1003",
+      "name": "createPrivilage",
+      "isPrivilage": true,
+      "admins": ["1003"],
+      "users": ["1003", "1008"]
+    },
+    {
+      "forum_id": "100100007",
+      "creator": "1003",
+      "name": "createPrivilage2",
+      "isPrivilage": true,
+      "admins": ["1003"],
+      "users": ["1003", "1008"]
+    },
+    {
+      "forum_id": "100100008",
+      "creator": "1003",
+      "name": "createPrivilage3",
+      "isPrivilage": true,
+      "admins": ["1003"],
+      "users": ["1003"]
+    },
+    {
+      "forum_id": "100100009",
+      "creator": "1003",
+      "name": "createPrivilage4",
+      "isPrivilage": true,
+      "admins": ["1003"],
+      "users": ["1003"]
+    },
+    {
+      "forum_id": "100100010",
+      "creator": "1003",
+      "name": "createPrivilage5",
+      "isPrivilage": true,
+      "admins": ["1003"],
+      "users": ["1003"]
     }
   ],
   "users": [
@@ -51,6 +91,6 @@
     { "id": "1007", "name": "user7", "img": "img7" },
     { "id": "1008", "name": "user8", "img": "img8" }
   ],
-  "maxForumId": 100100005,
+  "maxForumId": 100100010,
   "maxUserId": 1008
 }
