@@ -14,7 +14,7 @@ interface Notify{
   message: String,
   kind: enumNotify,
   state: enumState,
-  reqInfo: ReqInfo
+  reqJoin: ReqInfo
 }
 
 interface NotifyData{
@@ -44,7 +44,7 @@ export class NotifyMem{
       message: "Someone request to join your forum",
       kind: enumNotify.MANAGE,
       state: enumState.UNREAD,
-      reqInfo: asker
+      reqJoin: asker
     })
     
   }
@@ -61,21 +61,25 @@ export class NotifyMem{
   }
 
   allMyNotifies(uid: string): Notify[]{
-    console.log("allMyNotifies: ", uid);
-    console.log(this._notify[uid]);
+    // console.log("allMyNotifies: ", this._notify[uid]);
     return this._notify[uid];
   }
 
-  setStateNtf(uid: string, nid: string, state: enumState): void {
+  setStateNtf(uid: string, nid: string, yes: boolean): void {
     let ntf = this._notify[uid].find(item => {
-      item.id == nid
+      if (item.id == nid)
+        return item;
     });
 
+
+
     if (ntf) {
-      if (!state)
-        ntf.state = enumState.READ;
-      else
-        ntf.state = state + 1;
+      console.log("find ntf", ntf, "yes:", yes);
+      if (!yes)
+        ntf.state = enumState.DISAGREE;
+      else {
+        ntf.state = enumState.AGREE;
+      }
     }
 
     this.saveToNtf();
@@ -83,10 +87,11 @@ export class NotifyMem{
 
   getReqInfo(uid: string, nid: string): ReqInfo{
     let ntf = this._notify[uid].find(item => {
-      item.id == nid
+      if (item.id == nid)
+        return item;
     });
     if (ntf) {
-      return ntf.reqInfo;
+      return ntf.reqJoin;
     } else {
       return null;
     }

@@ -1,5 +1,5 @@
 export interface User{
-  uid: string,
+  id: string,
   name: string,
   img: string
 }
@@ -15,8 +15,8 @@ export interface Forum{
 
 export interface ReqInfo{
   fid: string,
-  info: string,
-  requester: User
+  reqInfo: string,
+  reqUser: User
 }
 
 export interface Message{
@@ -28,6 +28,6 @@ export interface Message{
 export enum enumState{
   UNREAD,
   READ,
-  DISCARD,
+  DISAGREE,
   AGREE
 }

@@ -95,16 +95,20 @@ const resolverMap: IResolvers = {
     },
 
     // process the request from user ask for join to forum
-    processReq(_: void, { uid, nid, state }): any {
-      console.log("processReq ", uid, nid, state);
-      MemData.getInstance().NotifyMem.setStateNtf(uid, nid, state);
-      if (state && state == enumState.AGREE) {
+    processReq(_: void, { uid, nid, yes }): any {
+      console.log("processReq ", uid, nid, yes);
+      MemData.getInstance().NotifyMem.setStateNtf(uid, nid, yes);
+      if (yes) {
         const reqInfo = MemData.getInstance().NotifyMem.getReqInfo(uid, nid);
+        console.log("req:", reqInfo);
         if (reqInfo) {
           let forum = MemData.getInstance().ForumMem.findForum(reqInfo.fid);
+          console.log("forum:", forum);
           if (forum) {
-            if (!forum.users.includes(uid)) {
-              forum.users.push(uid);
+            let ruid = reqInfo.reqUser?.id;
+            if (!forum.users.includes(ruid)) {
+              console.log("add user:", ruid);
+              forum.users.push(ruid);
               MemData.getInstance().ForumMem.flush();                
             }
           }

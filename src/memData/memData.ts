@@ -78,8 +78,8 @@ export class MemData{
       this._notify.RequestJoin(admin,
         {
           fid: objForum.forum_id,
-          info: "May I join to your forum?",
-          requester: UserInfo
+          reqInfo: "May I join to your forum?",
+          reqUser: UserInfo
         }, this._forum.maxNtfId());
     })
   }

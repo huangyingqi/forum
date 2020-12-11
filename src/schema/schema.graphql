@@ -59,16 +59,9 @@ input ForumInput {
   isPrivilage: Boolean
 }
 
-enum enumNtf {
-  UNREAD
-  READ
-  DISCARD
-  AGREE
-}
-
 type Mutation {
   createForum(uid: ID!, forum: ForumInput): Forum
   joinForum(uid: ID!, fid: ID!): ForumMessage
   postMessage(uid: ID!, fid: ID!, text: String): Message
-  processReq(uid: ID!, nid: ID!, state: enumNtf): String
+  processReq(uid: ID!, nid: ID!, yes: Boolean): String
 }

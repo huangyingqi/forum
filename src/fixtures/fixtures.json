@@ -54,7 +54,7 @@
       "name": "createPrivilage2",
       "isPrivilage": true,
       "admins": ["1003"],
-      "users": ["1003", "1008"]
+      "users": ["1003", "1008", "1006"]
     },
     {
       "forum_id": "100100008",
