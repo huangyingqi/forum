@@ -5,82 +5,41 @@
 3. modify joinForum sending request to admins if the forum is privilaged.
 4. add ack for all returned types include tips for client easy to know the condition.
 
-## Types
+5. change all define of types with GraphQLObjectType and GraphQLInputObjectType
 
-    type Notify {
-      id: ID!
-      state: Int!
-      kind: Int!
-      message: String!
-      time: Float!
-      reqJoin: ReqJoinForum
-    }
+## change all type's define
 
-    type Ack {
-      code: Int
-      tips: String
-    }
+> ### GraphQLObjectType
 
-    type AckForums {
-      ack: Ack
-      data: [Forum]
-    }
+- Forum
+- SimpleForum
+- User
+- Message
+- Notify
+- ForumMessage
 
-    type AckSimpleForums {
-      ack: Ack
-      data: [SimpleForum]
-    }
+> ### GraphQLInputObjectType
 
-    type AckUsers {
-      ack: Ack
-      data: [User]
-    }
+- ForumInput
+- JoinInput
+- postMessageInput
+- processReqInput
 
-    type AckMessages {
-      ack: Ack
-      data: [Message]
-    }
+## Querys(queryType)
 
-    type AckUser {
-      ack: Ack
-      data: User
-    }
+1. myForums(uid: ID!): Forums
+2. forums(uid: ID!): SimpleForums
+3. members(uid: ID!, fid: ID!): Users
+4. messages(uid: ID, fid: ID, offset: Int, showCount: Int): Messages
+5. userInfo(uid: ID!): User
+6. myNotifies(uid: ID!): Notifies
 
-    type AckNotifies {
-      ack: Ack
-      data: [Notify]
-    }
+## Mutations(mutationType)
 
-    type AckForum {
-      ack: Ack
-      data: Forum
-    }
-
-    type AckForumMessage {
-      ack: Ack
-      data: ForumMessage
-    }
-
-    type AckMessage {
-      ack: Ack
-      data: Message
-    }
-
-## Querys
-
-1. myForums(uid: ID!): AckForums
-2. forums(uid: ID!): AckSimpleForums
-3. members(uid: ID!, fid: ID!): AckUsers
-4. messages(uid: ID, fid: ID, offset: Int, showCount: Int): AckMessages
-5. userInfo(uid: ID!): AckUser
-6. myNotifies(uid: ID!): AckNotifies
-
-## Mutations
-
-1. createForum(uid: ID!, forum: ForumInput): AckForum
-2. joinForum(uid: ID!, fid: ID!): AckForumMessage
-3. postMessage(uid: ID!, fid: ID!, text: String): AckMessage
-4. processReq(uid: ID!, nid: ID!, yes: Boolean): Ack
+1. createForum(uid: ID!, forum: ForumInput): Forum
+2. joinForum(uid: ID!, fid: ID!): ForumMessage
+3. postMessage(uid: ID!, fid: ID!, text: String): Message
+4. processReq(uid: ID!, nid: ID!, yes: Boolean): String
 
 # Test data
 
@@ -88,15 +47,9 @@
 
     query{
       myForums(uid: 1001){
-        ack{
-          code
-          tips
-        }
-        data{
-          forum_id
-          name
-          users
-        }
+        forum_id
+        name
+        users
       }
     }
 
@@ -104,13 +57,8 @@
 
     query{
       forums(uid: 1003){
-        ack{
-          tips
-        }
-        data{
           forum_id
           name
-        }
       }
     }
 
@@ -118,12 +66,9 @@
 
     query{
       members(uid: 1001, fid:100100011){
-        ack{tips}
-        data{
           id
           name
           img
-        }
       }
     }
 
@@ -131,15 +76,12 @@
 
     query{
       messages(uid: 1001, fid: 100100012){
-        ack{tips}
-        data{
           text
           sender{
             name
             img
           }
           time
-        }
       }
     }
 
@@ -147,12 +89,9 @@
 
     query{
       userInfo(uid: 1005){
-        ack{tips}
-        data{
           id
           name
           img
-        }
       }
     }
 
@@ -160,8 +99,6 @@
 
     query{
       myNotifies(uid:1001){
-        ack{tips}
-        data{
           id
           state
           kind
@@ -174,7 +111,6 @@
               img
             }
           }
-        }
       }
     }
 
@@ -182,27 +118,23 @@
 
     mutation{
       createForum(
-        uid: 1001,
-        forum:{
-        name:"priForum",
-        isPrivilage:true})
+        input:{
+          uid: 1001,
+          name:"priForum",
+          isPrivilage:true})
       {
-        ack{tips}
-        data{
           forum_id
           name
           creator
           users
-        }
       }
     }
 
 > ## joinForum:
 
     mutation{
-      joinForum(uid: 1007, fid:100100011){
-        ack{tips}
-        data{
+      joinForum(
+        input:{uid: 1007, fid:100100011}){
           forum{
             forum_id
             users
@@ -217,7 +149,6 @@
               img
             }
           }
-        }
       }
     }
 
@@ -225,19 +156,18 @@
 
     mutation{
       postMessage(
-        uid: 1005,
-        fid: 100100012,
-        text: "I'm here!")
+        input:{
+          uid: 1005,
+          fid: 100100012,
+          text: "I'm here!"
+        })
       {
-        ack{tips}
-        data{
           time
           text
           sender{
             name
             img
           }
-        }
       }
     }
 
@@ -245,10 +175,9 @@
 
     mutation{
       processReq(
-        uid: 1001,
-        nid:10004,
-        yes: true)
-      {
-        tips
-      }
+        input:{
+          uid: 1001,
+          nid:10004,
+          yes: true
+        })
     }
