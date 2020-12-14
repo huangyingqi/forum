@@ -1,4 +1,4 @@
-import { writeFileSync } from 'fs';
+import { promises as fs } from 'fs';
 import path from "path";
 import * as fix from "../fixtures/fixtures.json";
 import { Forum, User } from "../interface/dataDefines";
@@ -43,8 +43,13 @@ export class ForumMem{
     return obForum;
   }
 
-  private saveToForum() {
-    writeFileSync(path.join(__dirname,'../fixtures/fixtures.json'), JSON.stringify(this._fixture), 'utf-8');
+  private async saveToForum() {
+    try {
+      await fs.writeFile(path.join(__dirname, '../fixtures/fixtures.json'), JSON.stringify(this._fixture), 'utf-8');
+    } catch (err) {
+      console.log("write to forum err:", err);
+    }
+    // writeFileSync(path.join(__dirname,'../fixtures/fixtures.json'), JSON.stringify(this._fixture), 'utf-8');
   }
 
   getUsers(users: string[]): User[]{

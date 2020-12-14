@@ -1,4 +1,4 @@
-import { writeFileSync } from 'fs';
+import { promises as fs } from 'fs';
 import path from "path";
 import * as ntf from "../fixtures/notifies.json";
 import { ReqInfo, enumState } from "../interface/dataDefines";
@@ -33,8 +33,13 @@ export class NotifyMem{
     console.log("ntf:", this._notify);
   }
 
-  private saveToNtf() {
-    writeFileSync(path.join(__dirname,'../fixtures/notifies.json'), JSON.stringify(this._notify), 'utf-8');
+  private async saveToNtf() {
+    try {
+      await fs.writeFile(path.join(__dirname,'../fixtures/notifies.json'), JSON.stringify(this._notify), 'utf-8');
+    } catch (err) {
+      console.log("saveToNtf error:", err);
+    }
+    
   }
 
   RequestJoin(admin: string, asker: ReqInfo, ntfId: string) {

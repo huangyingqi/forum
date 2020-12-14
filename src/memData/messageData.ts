@@ -1,4 +1,4 @@
-import { writeFileSync } from 'fs';
+import {promises as fs} from 'fs';
 import path from "path";
 import * as msg from "../fixtures/message.json";
 import { Message, User } from "../interface/dataDefines";
@@ -18,8 +18,12 @@ export class MessageMem{
     }
   }
 
-  private saveToMessage() {
-    writeFileSync(path.join(__dirname,'../fixtures/message.json'), JSON.stringify(this._message), 'utf-8');
+  private async saveToMessage() {
+    try {
+      await fs.writeFile(path.join(__dirname,'../fixtures/message.json'), JSON.stringify(this._message), 'utf-8');
+    } catch (err) {
+      console.log("writeFile to message error!", err);
+    }
   }
 
   postMessage(fid: string, userInfo: User, text: string): Message {
